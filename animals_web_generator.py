@@ -1,12 +1,21 @@
+# animals_web_generator.py
 import json
+from html import escape
+from pathlib import Path
 
-def load_data(file_path):
-    """ Loads a JSON file """
-    with open(file_path, "r", encoding="utf-8") as handle:
-        return json.load(handle)
+BASE = Path(__file__).resolve().parent
+DATA_PATH = BASE / "animals_data.json"
+TPL_PATH  = BASE / "animals_template.html"
+OUT_PATH  = BASE / "animals.html"
+PLACEHOLDER = "__REPLACE_ANIMALS_INFO__"
 
-def print_animals(data):
-    """Iterates animals and prints selected fields if present."""
+def load_data(file_path: Path):
+    with open(file_path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+def build_animals_html(data) -> str:
+    """Erzeugt <li>-Einträge pro Tier; nur vorhandene Felder werden ausgegeben."""
+    items = []
     for item in data:
         lines = []
 
@@ -14,24 +23,35 @@ def print_animals(data):
         if name:
             lines.append(f"Name: {name}")
 
-        characteristics = item.get("characteristics", {}) or {}
-        diet = characteristics.get("diet")
+        ch = item.get("characteristics", {}) or {}
+        diet = ch.get("diet")
         if diet:
             lines.append(f"Diet: {diet}")
 
-        locations = item.get("locations") or []
-        first_location = locations[0] if locations else None
-        if first_location:
-            lines.append(f"Location: {first_location}")
+        locs = item.get("locations") or []
+        if locs:
+            lines.append(f"Location: {locs[0]}")
 
-        type_ = characteristics.get("type")
-        if type_:
-            lines.append(f"Type: {type_}")
+        t = ch.get("type")
+        if t:
+            lines.append(f"Type: {t}")
 
         if lines:
-            print("\n".join(lines))
-            print()  # Leerzeile zwischen den Tieren
+            # HTML-sicher + Zeilenumbrüche als <br>
+            safe = [escape(s) for s in lines]
+            items.append("<li>" + "<br>".join(safe) + "</li>")
+
+    return "\n".join(items)
+
+def fill_template(template_path: Path, animals_html: str, out_path: Path):
+    tpl = template_path.read_text(encoding="utf-8")
+    if PLACEHOLDER not in tpl:
+        raise RuntimeError(f"Platzhalter {PLACEHOLDER} fehlt in {template_path.name}")
+    out = tpl.replace(PLACEHOLDER, animals_html)
+    out_path.write_text(out, encoding="utf-8")
 
 if __name__ == "__main__":
-    animals_data = load_data("animals_data.json")
-    print_animals(animals_data)
+    data = load_data(DATA_PATH)
+    animals_html = build_animals_html(data)
+    fill_template(TPL_PATH, animals_html, OUT_PATH)
+    print(f"OK → {OUT_PATH.name} mit {animals_html.count('<li>')} Einträgen geschrieben.")
