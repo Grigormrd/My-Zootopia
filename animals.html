@@ -1,91 +1,123 @@
-<html>
-    <head>
-        <style>
-        @gray-darker:               #444444;
-        @gray-dark:                 #696969;
-        @gray:                      #999999;
-        @gray-light:                #cccccc;
-        @gray-lighter:              #ececec;
-        @gray-lightest:             lighten(@gray-lighter,4%);
-
-
-        html {
-          background-color: #ffe9e9;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 40pt;
-            font-weight: normal;
-        }
-
-        body {
-          font-family: 'Roboto','Helvetica Neue', Helvetica, Arial, sans-serif;
-          font-style: normal;
-          font-weight: 400;
-          letter-spacing: 0;
-          padding: 1rem;
-          text-rendering: optimizeLegibility;
-          -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
-          -moz-font-feature-settings: "liga" on;
-          width: 900px;
-          margin: auto;
-        }
-
-        .cards {
-          list-style: none;
-          margin: 0;
-          padding: 0;
-        }
-
-        .cards__item {
-          background-color: white;
-          border-radius: 0.25rem;
-          box-shadow: 0 20px 40px -14px rgba(0,0,0,0.25);
-          overflow: hidden;
-          padding: 1rem;
-          margin: 50px;
-        }
-
-        .card__title {
-          color: @gray-dark;
-          font-size: 1.25rem;
-          font-weight: 300;
-          letter-spacing: 2px;
-          text-transform: uppercase;
-        }
-
-        .card__text {
-          flex: 1 1 auto;
-          font-size: 0.95rem;
-          line-height: 2;
-          margin-bottom: 1.25rem;
-        }
-        </style>
-    </head>
-    <body>
-        <h1>My Animal Repository</h1>
-        <ul class="cards">
-            <li>Name: American Foxhound<br>Diet: Omnivore<br>Location: North-America<br>Type: Hound</li>
-<li>Name: Arctic Fox<br>Diet: Carnivore<br>Location: Eurasia<br>Type: Mammal</li>
-<li>Name: Cross Fox<br>Diet: Carnivore<br>Location: North-America<br>Type: mammal</li>
-<li>Name: Darwin’s fox<br>Diet: Omnivore<br>Location: South-America<br>Type: Mammal</li>
-<li>Name: English Foxhound<br>Diet: Omnivore<br>Location: Europe</li>
-<li>Name: Fennec Fox<br>Diet: Omnivore<br>Location: Africa</li>
-<li>Name: Fox<br>Diet: Carnivore<br>Location: Africa<br>Type: Mammal</li>
-<li>Name: Fox Snakes<br>Diet: Carnivore<br>Location: North-America</li>
-<li>Name: Fox Squirrel<br>Diet: Omnivore<br>Location: Central-America<br>Type: rodent</li>
-<li>Name: Fox Terrier<br>Diet: Omnivore<br>Location: Europe</li>
-<li>Name: Golden-Crowned Flying Fox<br>Diet: Herbivore<br>Location: Asia</li>
-<li>Name: Gray Fox<br>Diet: Omnivore<br>Location: Central-America<br>Type: Mammal</li>
-<li>Name: Kit Fox<br>Diet: Omnivore<br>Location: Central-America<br>Type: mammal</li>
-<li>Name: Marble Fox<br>Diet: Omnivore<br>Location: North-America<br>Type: Mammal</li>
-<li>Name: Red Fox<br>Diet: Omnivore<br>Location: Africa</li>
-<li>Name: Smooth Fox Terrier<br>Diet: Omnivore<br>Location: Europe</li>
-<li>Name: Tibetan Fox<br>Diet: Carnivore<br>Location: Asia<br>Type: Mammal</li>
-<li>Name: Toy Fox Terrier<br>Diet: Omnivore<br>Location: North-America</li>
-<li>Name: Wire Fox Terrier<br>Diet: Omnivore<br>Location: Europe</li>
-        </ul>
-    </body>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>My Animal Repository</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --bg1:#ffe3e6;
+      --bg2:#f8dfe5;
+      --card:#ffffff;
+      --radius:12px;
+      --shadow:0 18px 38px rgba(0,0,0,.17);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,"Noto Sans",sans-serif;
+      background: linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:#111;
+    }
+    .container{
+      max-width: 880px;
+      margin: 48px auto 64px;
+      padding: 0 24px;
+    }
+    h1{
+      text-align:center;
+      margin: 0 0 32px;
+      font-weight:700;
+      font-size: clamp(32px,6vw,64px);
+    }
+    .cards{
+      list-style:none;
+      margin:0;
+      padding:0;
+    }
+    .cards__item{
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      margin: 28px 0;
+      box-shadow: var(--shadow);
+      line-height: 1.35;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>My Animal Repository</h1>
+    <ul class="cards">
+      <li class="cards__item">Name: American Foxhound<br/>
+    Diet: Omnivore<br/>
+    Location: North-America<br/>
+    Type: Hound<br/></li>
+<li class="cards__item">Name: Arctic Fox<br/>
+    Diet: Carnivore<br/>
+    Location: Eurasia<br/>
+    Type: Mammal<br/></li>
+<li class="cards__item">Name: Cross Fox<br/>
+    Diet: Carnivore<br/>
+    Location: North-America<br/>
+    Type: mammal<br/></li>
+<li class="cards__item">Name: Darwin’s fox<br/>
+    Diet: Omnivore<br/>
+    Location: South-America<br/>
+    Type: Mammal<br/></li>
+<li class="cards__item">Name: English Foxhound<br/>
+    Diet: Omnivore<br/>
+    Location: Europe<br/></li>
+<li class="cards__item">Name: Fennec Fox<br/>
+    Diet: Omnivore<br/>
+    Location: Africa<br/></li>
+<li class="cards__item">Name: Fox<br/>
+    Diet: Carnivore<br/>
+    Location: Africa<br/>
+    Type: Mammal<br/></li>
+<li class="cards__item">Name: Fox Snakes<br/>
+    Diet: Carnivore<br/>
+    Location: North-America<br/></li>
+<li class="cards__item">Name: Fox Squirrel<br/>
+    Diet: Omnivore<br/>
+    Location: Central-America<br/>
+    Type: rodent<br/></li>
+<li class="cards__item">Name: Fox Terrier<br/>
+    Diet: Omnivore<br/>
+    Location: Europe<br/></li>
+<li class="cards__item">Name: Golden-Crowned Flying Fox<br/>
+    Diet: Herbivore<br/>
+    Location: Asia<br/></li>
+<li class="cards__item">Name: Gray Fox<br/>
+    Diet: Omnivore<br/>
+    Location: Central-America<br/>
+    Type: Mammal<br/></li>
+<li class="cards__item">Name: Kit Fox<br/>
+    Diet: Omnivore<br/>
+    Location: Central-America<br/>
+    Type: mammal<br/></li>
+<li class="cards__item">Name: Marble Fox<br/>
+    Diet: Omnivore<br/>
+    Location: North-America<br/>
+    Type: Mammal<br/></li>
+<li class="cards__item">Name: Red Fox<br/>
+    Diet: Omnivore<br/>
+    Location: Africa<br/></li>
+<li class="cards__item">Name: Smooth Fox Terrier<br/>
+    Diet: Omnivore<br/>
+    Location: Europe<br/></li>
+<li class="cards__item">Name: Tibetan Fox<br/>
+    Diet: Carnivore<br/>
+    Location: Asia<br/>
+    Type: Mammal<br/></li>
+<li class="cards__item">Name: Toy Fox Terrier<br/>
+    Diet: Omnivore<br/>
+    Location: North-America<br/></li>
+<li class="cards__item">Name: Wire Fox Terrier<br/>
+    Diet: Omnivore<br/>
+    Location: Europe<br/></li>
+    </ul>
+  </main>
+</body>
 </html>
