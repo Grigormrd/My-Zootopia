@@ -8,28 +8,33 @@ def load_data(file_path):
         return json.load(f)
 
 def serialize_animal_item(item) -> str:
-    parts = []
-    name = item.get("name")
-    if name:
-        parts.append(f"Name: {escape(str(name))}<br/>")
-
+    """Serialisiert ein Tier als <li class="cards__item"> mit Titel & Infozeilen."""
+    name = escape(str(item.get("name", "Unknown")))
     ch = item.get("characteristics", {}) or {}
+
     diet = ch.get("diet")
-    if diet:
-        parts.append(f"Diet: {escape(str(diet))}<br/>")
-
-    locs = item.get("locations") or []
-    if locs:
-        parts.append(f"Location: {escape(str(locs[0]))}<br/>")
-
+    locs = item.get("locations") or item.get("locations")  # robust, falls Struktur variiert
+    first_loc = (item.get("locations") or [])
+    first_loc = first_loc[0] if first_loc else None
     t = ch.get("type")
+
+    rows = []
+    if diet:
+        rows.append(f"<strong>Diet:</strong> {escape(str(diet))}<br/>")
+    if first_loc:
+        rows.append(f"<strong>Location:</strong> {escape(str(first_loc))}<br/>")
     if t:
-        parts.append(f"Type: {escape(str(t))}<br/>")
+        rows.append(f"<strong>Type:</strong> {escape(str(t))}<br/>")
 
-    if not parts:
-        return ""
-    return '<li class="cards__item">' + "\n    ".join(parts) + "</li>"
+    # p-Block nur, wenn es wenigstens eine Zeile gibt
+    details = f'\n  <p class="card__text">\n      ' + "\n      ".join(rows) + '\n  </p>' if rows else ""
 
+    return (
+        '<li class="cards__item">\n'
+        f'  <div class="card__title">{name}</div>'
+        f'{details}\n'
+        '</li>'
+    )
 def build_animals_html(data) -> str:
     return "\n".join(filter(None, (serialize_animal_item(a) for a in data)))
 
