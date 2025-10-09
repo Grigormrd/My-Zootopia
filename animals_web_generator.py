@@ -1,52 +1,105 @@
+import os
+import sys
 import json
 from html import escape
+from typing import List, Dict, Any
+import requests
 
 PLACEHOLDER = "__REPLACE_ANIMALS_INFO__"
+API_URL = "https://api.api-ninjas.com/v1/animals?name={q}"
 
-def load_data(file_path):
-    with open(file_path, "r", encoding="utf-8") as f:
-        return json.load(f)
+def fetch_animals_from_api(query: str) -> List[Dict[str, Any]]:
+    """Fetch animals via API Ninjas /v1/animals?name=..."""
+    api_key = os.getenv("API_NINJAS_KEY") or os.getenv("X_API_KEY") or os.getenv("API_NINJAS_API_KEY")
+    if not api_key:
+        raise RuntimeError(
+            "Missing API key. Set env var API_NINJAS_KEY (Profile: https://api-ninjas.com/profile)"
+        )
 
-def serialize_animal_item(item) -> str:
-    """Serialisiert ein Tier als <li class="cards__item"> mit Titel & Infozeilen."""
+    resp = requests.get(
+        API_URL.format(q=query),
+        headers={"X-Api-Key": api_key},
+        timeout=15,
+    )
+    if resp.status_code != 200:
+        raise RuntimeError(f"API error {resp.status_code}: {resp.text[:200]}")
+
+    data = resp.json()
+    if not isinstance(data, list):
+        # API usually returns a list; be defensive
+        return []
+    return data
+
+def serialize_animal_item(item: Dict[str, Any]) -> str:
+    """Like A Pro: <li class='cards__item'><div class='card__title'>...</div><p class='card__text'>...</p></li>"""
     name = escape(str(item.get("name", "Unknown")))
     ch = item.get("characteristics", {}) or {}
-
-    diet = ch.get("diet")
-    locs = item.get("locations") or item.get("locations")  # robust, falls Struktur variiert
-    first_loc = (item.get("locations") or [])
-    first_loc = first_loc[0] if first_loc else None
-    t = ch.get("type")
+    locs = item.get("locations") or []
+    first_loc = locs[0] if locs else None
 
     rows = []
+    diet = ch.get("diet")
     if diet:
         rows.append(f"<strong>Diet:</strong> {escape(str(diet))}<br/>")
     if first_loc:
         rows.append(f"<strong>Location:</strong> {escape(str(first_loc))}<br/>")
+    t = ch.get("type")
     if t:
         rows.append(f"<strong>Type:</strong> {escape(str(t))}<br/>")
 
-    # p-Block nur, wenn es wenigstens eine Zeile gibt
-    details = f'\n  <p class="card__text">\n      ' + "\n      ".join(rows) + '\n  </p>' if rows else ""
+    detail_html = ""
+    if rows:
+        detail_html = '\n  <p class="card__text">\n      ' + "\n      ".join(rows) + "\n  </p>"
 
     return (
         '<li class="cards__item">\n'
         f'  <div class="card__title">{name}</div>'
-        f'{details}\n'
+        f'{detail_html}\n'
         '</li>'
     )
-def build_animals_html(data) -> str:
-    return "\n".join(filter(None, (serialize_animal_item(a) for a in data)))
 
-def fill_template(template_path, animals_html, output_html_path):
+def build_animals_html(items: List[Dict[str, Any]]) -> str:
+    return "\n".join(serialize_animal_item(x) for x in items if isinstance(x, dict))
+
+def render_empty_message(query: str) -> str:
+    """Milestone 3: freundliche Message als Card (valides HTML innerhalb des <ul>)."""
+    q = escape(query)
+    return (
+        '<li class="cards__item">'
+        f'<div class="card__title">No results</div>'
+        f'<p class="card__text">The animal &quot;{q}&quot; doesn’t exist.</p>'
+        '</li>'
+    )
+
+def fill_template(template_path: str, injected_html: str, output_html_path: str) -> None:
     with open(template_path, "r", encoding="utf-8") as f:
         tpl = f.read()
-    html = tpl.replace(PLACEHOLDER, animals_html)
+    html = tpl.replace(PLACEHOLDER, injected_html)
     with open(output_html_path, "w", encoding="utf-8") as f:
         f.write(html)
 
 if __name__ == "__main__":
-    data = load_data("animals_data.json")
-    animals_html = build_animals_html(data)
-    fill_template("animals_template.html", animals_html, "animals.html")
-    print(f"OK: animals.html written with {animals_html.count('<li class=\"cards__item\">')} items.")
+    # Milestone 2: Name vom User (CLI-Arg priorisiert, sonst prompt)
+    query = " ".join(sys.argv[1:]).strip() if len(sys.argv) > 1 else ""
+    if not query:
+        try:
+            query = input("Enter a name of an animal: ").strip()
+        except EOFError:
+            query = "Fox"  # fallback for non-interactive
+
+    try:
+        data = fetch_animals_from_api(query or "Fox")
+        injected = build_animals_html(data) if data else render_empty_message(query or "Fox")
+        fill_template("animals_template.html", injected, "animals.html")
+        print('Website was successfully generated to the file animals.html.')
+        print(f'Query: "{query or "Fox"}", items: {injected.count("<li class=\"cards__item\">")}')
+    except Exception as e:
+        # Zeige Fehler im HTML statt im Terminal (für konsistente UX)
+        injected = (
+            '<li class="cards__item">'
+            '<div class="card__title">Error</div>'
+            f'<p class="card__text">{escape(str(e))}</p>'
+            '</li>'
+        )
+        fill_template("animals_template.html", injected, "animals.html")
+        print("animals.html generated with error message.")
