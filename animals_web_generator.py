@@ -1,13 +1,12 @@
-import sysgitgit
+import sys
 from html import escape
 from typing import List, Dict, Any
-import data_fetcher  # <- nutzt nur die öffentliche fetch_data-Schnittstelle
+import data_fetcher
 
 PLACEHOLDER = "__REPLACE_ANIMALS_INFO__"
 TEMPLATE_PATH = "animals_template.html"
 OUTPUT_PATH = "animals.html"
 
-# ---------- Serialisierung: Like A Pro ----------
 def serialize_animal_item(item: Dict[str, Any]) -> str:
     name = escape(str(item.get("name", "Unknown")))
     ch = item.get("characteristics", {}) or {}
@@ -44,26 +43,24 @@ def render_empty_message(query: str) -> str:
         '</li>'
     )
 
-# ---------- Template füllen ----------
 def fill_template(template_path: str, injected_html: str, output_html_path: str) -> None:
     with open(template_path, "r", encoding="utf-8") as f:
         tpl = f.read()
+    if PLACEHOLDER not in tpl:
+        raise RuntimeError(f"Placeholder {PLACEHOLDER} missing in {template_path}")
     html = tpl.replace(PLACEHOLDER, injected_html)
     with open(output_html_path, "w", encoding="utf-8") as f:
         f.write(html)
 
-# ---------- CLI ----------
 if __name__ == "__main__":
-    # CLI-Argumente haben Priorität; sonst Prompt (wie in den Milestones)
     query = " ".join(sys.argv[1:]).strip() if len(sys.argv) > 1 else ""
     if not query:
         try:
             query = input("Please enter an animal: ").strip()
         except EOFError:
-            query = "Fox"  # Fallback für nicht-interaktive Umgebungen
+            query = "Fox"
 
     data = data_fetcher.fetch_data(query or "Fox")
     injected = build_animals_html(data) if data else render_empty_message(query or "Fox")
     fill_template(TEMPLATE_PATH, injected, OUTPUT_PATH)
-
-    print(f'Website was successfully generated to the file {OUTPUT_PATH}.')
+    print(f"Website was successfully generated to the file {OUTPUT_PATH}.")

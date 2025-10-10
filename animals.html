@@ -6,117 +6,83 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root{
-      --bg1:#ffe3e6;
-      --bg2:#f8dfe5;
-      --card:#ffffff;
-      --radius:12px;
-      --shadow:0 18px 38px rgba(0,0,0,.17);
+      --bg1:#ffe3e6; --bg2:#f8dfe5; --card:#fff;
+      --radius:12px; --shadow:0 18px 38px rgba(0,0,0,.17);
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    *{box-sizing:border-box} html,body{height:100%}
     body{
-      margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,"Noto Sans",sans-serif;
-      background: linear-gradient(180deg,var(--bg1),var(--bg2));
-      color:#111;
+      margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;
+      background:linear-gradient(180deg,var(--bg1),var(--bg2)); color:#111;
     }
-    .container{
-      max-width: 880px;
-      margin: 48px auto 64px;
-      padding: 0 24px;
-    }
-    h1{
-      text-align:center;
-      margin: 0 0 32px;
-      font-weight:700;
-      font-size: clamp(32px,6vw,64px);
-    }
-    .cards{
-      list-style:none;
-      margin:0;
-      padding:0;
-    }
+    .container{max-width:880px;margin:48px auto 64px;padding:0 24px;}
+    h1{margin:0 0 32px;text-align:center;font-weight:700;font-size:clamp(32px,6vw,64px);}
+    .cards{list-style:none;margin:0;padding:0;}
     .cards__item{
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 20px 22px;
-      margin: 28px 0;
-      box-shadow: var(--shadow);
-      line-height: 1.35;
+      background:var(--card); border-radius:var(--radius);
+      padding:20px 22px; margin:28px 0; box-shadow:var(--shadow); line-height:1.35;
     }
+    .card__title{ font-weight:600; font-size:18px; margin-bottom:8px; }
+    .card__text{ margin:0; }
   </style>
 </head>
 <body>
   <main class="container">
     <h1>My Animal Repository</h1>
     <ul class="cards">
-      <li class="cards__item">Name: American Foxhound<br/>
-        Diet: Omnivore<br/>
-        Location: North-America<br/>
-        Type: Hound<br/></li>
-    <li class="cards__item">Name: Arctic Fox<br/>
-        Diet: Carnivore<br/>
-        Location: Eurasia<br/>
-        Type: Mammal<br/></li>
-    <li class="cards__item">Name: Cross Fox<br/>
-        Diet: Carnivore<br/>
-        Location: North-America<br/>
-        Type: mammal<br/></li>
-    <li class="cards__item">Name: Darwin’s fox<br/>
-        Diet: Omnivore<br/>
-        Location: South-America<br/>
-        Type: Mammal<br/></li>
-    <li class="cards__item">Name: English Foxhound<br/>
-        Diet: Omnivore<br/>
-        Location: Europe<br/></li>
-    <li class="cards__item">Name: Fennec Fox<br/>
-        Diet: Omnivore<br/>
-        Location: Africa<br/></li>
-    <li class="cards__item">Name: Fox<br/>
-        Diet: Carnivore<br/>
-        Location: Africa<br/>
-        Type: Mammal<br/></li>
-    <li class="cards__item">Name: Fox Snakes<br/>
-        Diet: Carnivore<br/>
-        Location: North-America<br/></li>
-    <li class="cards__item">Name: Fox Squirrel<br/>
-        Diet: Omnivore<br/>
-        Location: Central-America<br/>
-        Type: rodent<br/></li>
-    <li class="cards__item">Name: Fox Terrier<br/>
-        Diet: Omnivore<br/>
-        Location: Europe<br/></li>
-    <li class="cards__item">Name: Golden-Crowned Flying Fox<br/>
-        Diet: Herbivore<br/>
-        Location: Asia<br/></li>
-    <li class="cards__item">Name: Gray Fox<br/>
-        Diet: Omnivore<br/>
-        Location: Central-America<br/>
-        Type: Mammal<br/></li>
-    <li class="cards__item">Name: Kit Fox<br/>
-        Diet: Omnivore<br/>
-        Location: Central-America<br/>
-        Type: mammal<br/></li>
-    <li class="cards__item">Name: Marble Fox<br/>
-        Diet: Omnivore<br/>
-        Location: North-America<br/>
-        Type: Mammal<br/></li>
-    <li class="cards__item">Name: Red Fox<br/>
-        Diet: Omnivore<br/>
-        Location: Africa<br/></li>
-    <li class="cards__item">Name: Smooth Fox Terrier<br/>
-        Diet: Omnivore<br/>
-        Location: Europe<br/></li>
-    <li class="cards__item">Name: Tibetan Fox<br/>
-        Diet: Carnivore<br/>
-        Location: Asia<br/>
-        Type: Mammal<br/></li>
-    <li class="cards__item">Name: Toy Fox Terrier<br/>
-        Diet: Omnivore<br/>
-        Location: North-America<br/></li>
-    <li class="cards__item">Name: Wire Fox Terrier<br/>
-        Diet: Omnivore<br/>
-        Location: Europe<br/></li>
+      <li class="cards__item">
+  <div class="card__title">Cape Lion</div>
+  <p class="card__text">
+      <strong>Diet:</strong> Carnivore<br/>
+      <strong>Location:</strong> Africa<br/>
+      <strong>Type:</strong> mammal<br/>
+  </p>
+</li>
+<li class="cards__item">
+  <div class="card__title">Golden Lion Tamarin</div>
+  <p class="card__text">
+      <strong>Diet:</strong> Omnivore<br/>
+      <strong>Location:</strong> South-America<br/>
+      <strong>Type:</strong> Mammal<br/>
+  </p>
+</li>
+<li class="cards__item">
+  <div class="card__title">Lion</div>
+  <p class="card__text">
+      <strong>Diet:</strong> Carnivore<br/>
+      <strong>Location:</strong> Africa<br/>
+  </p>
+</li>
+<li class="cards__item">
+  <div class="card__title">Lion’s Mane Jellyfish</div>
+  <p class="card__text">
+      <strong>Diet:</strong> Carnivore<br/>
+      <strong>Location:</strong> Ocean<br/>
+      <strong>Type:</strong> Cnidarian<br/>
+  </p>
+</li>
+<li class="cards__item">
+  <div class="card__title">Lionfish</div>
+  <p class="card__text">
+      <strong>Diet:</strong> Carnivore<br/>
+      <strong>Location:</strong> Ocean<br/>
+  </p>
+</li>
+<li class="cards__item">
+  <div class="card__title">Mountain Lion</div>
+  <p class="card__text">
+      <strong>Diet:</strong> Carnivore<br/>
+      <strong>Location:</strong> Central-America<br/>
+      <strong>Type:</strong> Mammal<br/>
+  </p>
+</li>
+<li class="cards__item">
+  <div class="card__title">Sea Lion</div>
+  <p class="card__text">
+      <strong>Diet:</strong> Omnivore<br/>
+      <strong>Location:</strong> Ocean<br/>
+      <strong>Type:</strong> Mammal<br/>
+  </p>
+</li>
     </ul>
   </main>
 </body>
